@@ -1,0 +1,38 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# Development
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing
+test_*.py
+pytest.ini
+bandit-report.json
+
+# Documentation
+README.md
+LICENSE
+
+# CI/CD
+.github/
+
+# Dependencies
+requirements-dev.txt
