@@ -13,7 +13,7 @@ def test_home_page(client):
     """Test the home page loads successfully"""
     response = client.get('/')
     assert response.status_code == 200
-    assert b'DevSecOps Demo Application' in response.data
+    assert b'DevSecOps Dashboard' in response.data
 
 def test_health_endpoint(client):
     """Test the health check endpoint"""

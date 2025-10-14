@@ -342,7 +342,7 @@ def dashboard():
 
     return render_template_string(
         HTML_TEMPLATE,
-        timestamp=datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC"),
+        timestamp=datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S UTC"),
         bandit=bandit,
         safety=safety,
         coverage=coverage,
@@ -362,7 +362,7 @@ def dashboard():
 def api_status():
     """Return JSON summary for external monitoring"""
     return jsonify({
-        "timestamp": datetime.datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.datetime.now(datetime.UTC).isoformat() + "Z",
         "bandit": load_bandit_results(),
         "safety": load_safety_results(),
         "coverage": load_coverage(),
@@ -388,6 +388,25 @@ def update_results():
 def health():
     """Basic health endpoint"""
     return jsonify({"status": "healthy", "version": "1.0.0"}), 200
+
+@app.route('/api/echo', methods=['POST'])
+def echo():
+    """Echo endpoint for testing"""
+    from flask import request
+
+    if not request.is_json:
+        return jsonify({"error": "Content-Type must be application/json"}), 415
+
+    data = request.get_json()
+    message = data.get('message', '')
+
+    if len(message) > 1000:
+        return jsonify({"error": "Message exceeds maximum length of 1000 characters"}), 400
+
+    return jsonify({
+        "echo": message,
+        "length": len(message)
+    }), 200
 
 
 if __name__ == "__main__":
