@@ -38,11 +38,14 @@ def test_echo_endpoint_success(client):
     assert data['length'] == len(test_message)
 
 def test_echo_endpoint_no_data(client):
-    """Test the echo endpoint with no data"""
+    """Test the echo endpoint with no data (empty message)"""
     response = client.post('/api/echo',
-                          data=json.dumps({}),
+                          data=json.dumps({'message': ''}),
                           content_type='application/json')
     assert response.status_code == 200
+    data = json.loads(response.data)
+    assert data['echo'] == ''
+    assert data['length'] == 0
 
 def test_echo_endpoint_too_long(client):
     """Test the echo endpoint with message too long"""
