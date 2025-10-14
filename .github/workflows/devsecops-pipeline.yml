@@ -1,5 +1,10 @@
 name: DevSecOps Pipeline
 
+permissions:
+  contents: read
+  actions: read
+  security-events: write
+
 on:
   push:
     branches: [ main, develop ]
@@ -12,36 +17,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
+    - uses: actions/setup-python@v5
       with:
         python-version: '3.11'
 
-    - name: Install dependencies
-      run: |
+    - uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('requirements-dev.txt') }}
+        restore-keys: ${{ runner.os }}-pip-
+
+    - run: |
         python -m pip install --upgrade pip
-        pip install -r requirements-dev.txt
-        pip install pbr
+        pip install -r requirements-dev.txt pbr bandit safety
 
     - name: Run Bandit (SAST)
       run: |
-        echo "Running Bandit security scanner..."
         bandit -r app.py test_app.py -f json -o bandit-report.json || true
         bandit -r app.py test_app.py -f txt
       continue-on-error: true
 
     - name: Run Safety (Dependency Check)
       run: |
-        echo "Checking dependencies for vulnerabilities..."
         safety check --json || true
         safety check
       continue-on-error: true
 
-    - name: Upload Bandit Report
-      uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v4
       if: always()
       with:
         name: bandit-security-report
@@ -53,26 +57,23 @@ jobs:
     needs: security-scan
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Set up Python
-      uses: actions/setup-python@v5
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: '3.11'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements-dev.txt
-        pip install pbr
+    - uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('requirements-dev.txt') }}
+        restore-keys: ${{ runner.os }}-pip-
 
-    - name: Run tests with coverage
-      run: |
+    - run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-dev.txt pbr
         pytest --cov=app --cov-report=xml --cov-report=term
 
-    - name: Upload coverage report
-      uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v4
       if: always()
       with:
         name: coverage-report
@@ -84,19 +85,13 @@ jobs:
     needs: [security-scan, test]
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-
-    - name: Build Docker image
-      run: |
+    - uses: actions/checkout@v4
+    - uses: docker/setup-buildx-action@v3
+    - run: |
         docker build -t devsecops-demo:${{ github.sha }} .
         docker build -t devsecops-demo:latest .
 
-    - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@0.20.0
+    - uses: aquasecurity/trivy-action@0.24.0
       with:
         image-ref: 'devsecops-demo:latest'
         format: 'table'
@@ -110,8 +105,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-    - name: Simulate deployment
-      run: |
+    - run: |
         echo "Deployment would happen here..."
         echo "Environment: Production"
         echo "Image: devsecops-demo:${{ github.sha }}"
