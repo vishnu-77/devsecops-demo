@@ -4,6 +4,10 @@ import json
 import xml.etree.ElementTree as ET
 import datetime
 import requests
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -181,9 +185,10 @@ HTML_TEMPLATE = """
 <html>
 <head>
     <title>DevSecOps Dashboard</title>
+    <meta http-equiv="refresh" content="30">
     <style>
         body { font-family: "Segoe UI", Arial, sans-serif; background-color: #f4f6f8; margin: 0; }
-        header { background-color: #0078d4; color: white; padding: 20px; text-align: center; }
+        header { background-color: #0078d4; color: white; padding: 20px; text-align: center; position: relative; }
         .container { max-width: 1100px; margin: 30px auto; background: white; padding: 25px 40px;
                      border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
@@ -203,21 +208,90 @@ HTML_TEMPLATE = """
         .pipeline-link:hover { text-decoration: underline; }
         .section { margin-top: 30px; }
         footer { margin-top: 40px; text-align: center; color: #666; font-size: 0.9em; }
+        .refresh-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+        .spinner.active { display: block; }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .updating { animation: pulse 1s ease-in-out infinite; }
+        .auto-refresh-controls {
+            margin-top: 10px;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .refresh-btn {
+            background: #0078d4;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .refresh-btn:hover { background: #005a9e; }
+        .refresh-btn:disabled { background: #6c757d; cursor: not-allowed; }
     </style>
 </head>
 <body>
     <header>
         <h1>DevSecOps Dashboard</h1>
         <p>Security · Testing · CI/CD Monitoring</p>
+        <div class="refresh-indicator">
+            <div class="spinner" id="spinner"></div>
+            <span id="refresh-status">Auto-refresh: ON (30s)</span>
+        </div>
     </header>
 
     <div class="container">
         <h2>System Overview</h2>
         <p><strong>Status:</strong> <span class="status ok">Running</span></p>
         <p><strong>Version:</strong> 1.0.0</p>
-        <p><strong>Last Updated:</strong> {{ timestamp }}</p>
+        <p><strong>Last Updated:</strong> <span id="timestamp">{{ timestamp }}</span></p>
 
-        <div class="section">
+        <div class="auto-refresh-controls">
+            <div>
+                <label>
+                    <input type="checkbox" id="auto-refresh-toggle" checked>
+                    Enable Auto-Refresh (every <select id="refresh-interval">
+                        <option value="10">10s</option>
+                        <option value="30" selected>30s</option>
+                        <option value="60">60s</option>
+                        <option value="120">2min</option>
+                    </select>)
+                </label>
+            </div>
+            <button class="refresh-btn" id="manual-refresh">Refresh Now</button>
+        </div>
+
+        <div class="section" id="github-section">
             <h2>GitHub Actions Pipeline Status</h2>
             {% if github_actions['status'] != 'N/A' and github_actions['status'] != 'ERROR' %}
             <div class="pipeline-info">
@@ -229,9 +303,19 @@ HTML_TEMPLATE = """
                 <p><strong>Branch:</strong> {{ github_actions['branch'] }} | <strong>Commit:</strong> {{ github_actions.get('commit', 'N/A') }}</p>
                 {% endif %}
             </div>
+            {% else %}
+            <div class="pipeline-info">
+                <p><strong>Status:</strong> {{ github_actions.get('status', 'N/A') }}</p>
+                {% if github_actions.get('error') %}
+                <p><strong>Error:</strong> {{ github_actions['error'] }}</p>
+                {% endif %}
+                {% if github_actions.get('message') %}
+                <p>{{ github_actions['message'] }}</p>
+                {% endif %}
+            </div>
             {% endif %}
 
-            <table>
+            <table id="pipeline-jobs">
                 <tr><th>Job</th><th>Description</th><th>Status</th></tr>
                 <tr>
                     <td>Security Scanning</td>
@@ -256,35 +340,153 @@ HTML_TEMPLATE = """
             </table>
         </div>
 
-        <div class="section">
+        <div class="section" id="tools-section">
             <h2>Security & Testing Tool Results</h2>
-            <table>
+            <table id="tools-table">
                 <tr><th>Tool</th><th>Purpose</th><th>Summary</th><th>Status</th></tr>
                 <tr>
                     <td>Bandit</td><td>Static code analysis (SAST)</td>
-                    <td>{{ bandit['issues'] }} issues found</td>
-                    <td><span class="status {{ bandit_status }}">{{ bandit['status'] }}</span></td>
+                    <td id="bandit-summary">{{ bandit['issues'] }} issues found</td>
+                    <td><span class="status {{ bandit_status }}" id="bandit-status">{{ bandit['status'] }}</span></td>
                 </tr>
                 <tr>
                     <td>Safety</td><td>Dependency vulnerability scan</td>
-                    <td>{{ safety['vulns'] }} vulnerabilities</td>
-                    <td><span class="status {{ safety_status }}">{{ safety['status'] }}</span></td>
+                    <td id="safety-summary">{{ safety['vulns'] }} vulnerabilities</td>
+                    <td><span class="status {{ safety_status }}" id="safety-status">{{ safety['status'] }}</span></td>
                 </tr>
                 <tr>
                     <td>Coverage</td><td>Unit test coverage</td>
-                    <td>{{ coverage['coverage'] }}%</td>
-                    <td><span class="status {{ coverage_status }}">{{ coverage['status'] }}</span></td>
+                    <td id="coverage-summary">{{ coverage['coverage'] }}%</td>
+                    <td><span class="status {{ coverage_status }}" id="coverage-status">{{ coverage['status'] }}</span></td>
                 </tr>
                 <tr>
                     <td>Trivy</td><td>Container image scan</td>
-                    <td>{{ trivy['vulns'] }} vulnerabilities</td>
-                    <td><span class="status {{ trivy_status }}">{{ trivy['status'] }}</span></td>
+                    <td id="trivy-summary">{{ trivy['vulns'] }} vulnerabilities</td>
+                    <td><span class="status {{ trivy_status }}" id="trivy-status">{{ trivy['status'] }}</span></td>
                 </tr>
             </table>
         </div>
     </div>
 
     <footer>© 2025 DevSecOps Demo · Flask Monitoring Dashboard</footer>
+
+    <script>
+        let refreshTimer = null;
+        let refreshInterval = 30000; // 30 seconds default
+
+        const spinner = document.getElementById('spinner');
+        const refreshStatus = document.getElementById('refresh-status');
+        const autoRefreshToggle = document.getElementById('auto-refresh-toggle');
+        const intervalSelect = document.getElementById('refresh-interval');
+        const manualRefreshBtn = document.getElementById('manual-refresh');
+
+        function updateStatusClass(element, oldClasses, newClass) {
+            const classes = ['ok', 'success', 'warn', 'fail', 'failure', 'na', 'error', 'in-progress', 'queued', 'skipped', 'cancelled'];
+            classes.forEach(c => element.classList.remove(c));
+            element.classList.add(newClass);
+        }
+
+        function getStatusClass(status) {
+            const s = status.toLowerCase();
+            if (s.startsWith('ok') || s === 'success') return 'ok';
+            if (s.startsWith('warn')) return 'warn';
+            if (s.startsWith('fail') || s === 'failure') return 'fail';
+            if (s === 'error') return 'error';
+            if (s.includes('progress') || s === 'queued') return 'in-progress';
+            if (s === 'skipped' || s === 'cancelled') return 'skipped';
+            return 'na';
+        }
+
+        async function refreshData() {
+            spinner.classList.add('active');
+            manualRefreshBtn.disabled = true;
+
+            try {
+                const response = await fetch('/api/status');
+                const data = await response.json();
+
+                // Update timestamp
+                const timestamp = new Date(data.timestamp);
+                document.getElementById('timestamp').textContent =
+                    timestamp.toLocaleString('en-US', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        timeZone: 'UTC',
+                        timeZoneName: 'short'
+                    });
+
+                // Update tool results
+                if (data.bandit) {
+                    document.getElementById('bandit-summary').textContent = data.bandit.issues + ' issues found';
+                    const banditStatus = document.getElementById('bandit-status');
+                    banditStatus.textContent = data.bandit.status;
+                    updateStatusClass(banditStatus, null, getStatusClass(data.bandit.status));
+                }
+
+                if (data.safety) {
+                    document.getElementById('safety-summary').textContent = data.safety.vulns + ' vulnerabilities';
+                    const safetyStatus = document.getElementById('safety-status');
+                    safetyStatus.textContent = data.safety.status;
+                    updateStatusClass(safetyStatus, null, getStatusClass(data.safety.status));
+                }
+
+                if (data.coverage) {
+                    document.getElementById('coverage-summary').textContent = data.coverage.coverage + '%';
+                    const coverageStatus = document.getElementById('coverage-status');
+                    coverageStatus.textContent = data.coverage.status;
+                    updateStatusClass(coverageStatus, null, getStatusClass(data.coverage.status));
+                }
+
+                if (data.trivy) {
+                    document.getElementById('trivy-summary').textContent = data.trivy.vulns + ' vulnerabilities';
+                    const trivyStatus = document.getElementById('trivy-status');
+                    trivyStatus.textContent = data.trivy.status;
+                    updateStatusClass(trivyStatus, null, getStatusClass(data.trivy.status));
+                }
+
+                // Reload GitHub Actions section (full page reload for complex template logic)
+                // This ensures job statuses are properly updated
+                const githubSection = document.getElementById('github-section');
+                githubSection.classList.add('updating');
+                setTimeout(() => githubSection.classList.remove('updating'), 500);
+
+            } catch (error) {
+                console.error('Failed to refresh data:', error);
+                refreshStatus.textContent = 'Auto-refresh: ERROR';
+            } finally {
+                spinner.classList.remove('active');
+                manualRefreshBtn.disabled = false;
+            }
+        }
+
+        function startAutoRefresh() {
+            if (refreshTimer) clearInterval(refreshTimer);
+            if (autoRefreshToggle.checked) {
+                refreshTimer = setInterval(refreshData, refreshInterval);
+                const seconds = refreshInterval / 1000;
+                refreshStatus.textContent = `Auto-refresh: ON (${seconds}s)`;
+            } else {
+                refreshStatus.textContent = 'Auto-refresh: OFF';
+            }
+        }
+
+        // Event listeners
+        autoRefreshToggle.addEventListener('change', startAutoRefresh);
+
+        intervalSelect.addEventListener('change', (e) => {
+            refreshInterval = parseInt(e.target.value) * 1000;
+            startAutoRefresh();
+        });
+
+        manualRefreshBtn.addEventListener('click', refreshData);
+
+        // Start auto-refresh on load
+        startAutoRefresh();
+    </script>
 </body>
 </html>
 """
@@ -310,11 +512,19 @@ def dashboard():
         if s == "skipped" or s == "cancelled": return "skipped"
         return "na"
 
+    def normalize_job_name(name):
+        """Normalize job name for matching"""
+        return name.lower().replace(" ", "-").replace("&", "").replace("(", "").replace(")", "").replace("--", "-").strip()
+
     def get_job_status(job_name):
         """Get status class for a specific GitHub Actions job"""
         jobs = github_actions.get("jobs", {})
+        normalized_search = normalize_job_name(job_name)
+
         for key, job in jobs.items():
-            if job_name in key:
+            normalized_key = normalize_job_name(key)
+            # Check if the search term is in the key or vice versa
+            if normalized_search in normalized_key or normalized_key in normalized_search:
                 conclusion = job.get("conclusion", "none")
                 if conclusion == "success":
                     return "success"
@@ -331,8 +541,12 @@ def dashboard():
     def get_job_conclusion(job_name):
         """Get conclusion text for a specific GitHub Actions job"""
         jobs = github_actions.get("jobs", {})
+        normalized_search = normalize_job_name(job_name)
+
         for key, job in jobs.items():
-            if job_name in key:
+            normalized_key = normalize_job_name(key)
+            # Check if the search term is in the key or vice versa
+            if normalized_search in normalized_key or normalized_key in normalized_search:
                 conclusion = job.get("conclusion", "none")
                 if conclusion and conclusion != "none":
                     return conclusion.upper()
