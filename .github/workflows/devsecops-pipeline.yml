@@ -17,39 +17,55 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-    - uses: actions/setup-python@v5
+    - name: Set up Python
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
 
-    - uses: actions/cache@v4
+    - name: Cache pip packages
+      uses: actions/cache@v4
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('requirements-dev.txt') }}
-        restore-keys: ${{ runner.os }}-pip-
+        restore-keys: |
+          ${{ runner.os }}-pip-
 
-    - run: |
+    - name: Install dependencies
+      run: |
         python -m pip install --upgrade pip
         pip install -r requirements-dev.txt pbr bandit safety
 
     - name: Run Bandit (SAST)
       run: |
+        echo "Running Bandit security scanner..."
         bandit -r app.py test_app.py -f json -o bandit-report.json || true
         bandit -r app.py test_app.py -f txt
       continue-on-error: true
 
     - name: Run Safety (Dependency Check)
       run: |
-        safety check --json || true
+        echo "Checking dependencies for vulnerabilities..."
+        safety check --json > safety.json || true
         safety check
       continue-on-error: true
 
-    - uses: actions/upload-artifact@v4
+    - name: Upload Bandit Report
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: bandit-security-report
         path: bandit-report.json
+
+    - name: Upload Safety Report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: safety-report
+        path: safety.json
+
 
   test:
     name: Unit Tests
@@ -57,46 +73,111 @@ jobs:
     needs: security-scan
 
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
 
-    - uses: actions/cache@v4
+    - name: Cache pip packages
+      uses: actions/cache@v4
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('requirements-dev.txt') }}
-        restore-keys: ${{ runner.os }}-pip-
+        restore-keys: |
+          ${{ runner.os }}-pip-
 
-    - run: |
+    - name: Install dependencies
+      run: |
         python -m pip install --upgrade pip
-        pip install -r requirements-dev.txt pbr
+        pip install -r requirements-dev.txt pbr pytest pytest-cov
+
+    - name: Run tests with coverage
+      run: |
         pytest --cov=app --cov-report=xml --cov-report=term
 
-    - uses: actions/upload-artifact@v4
+    - name: Upload coverage report
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: coverage-report
         path: coverage.xml
 
+
   build:
-    name: Build Docker Image
+    name: Build & Scan Docker Image
     runs-on: ubuntu-latest
     needs: [security-scan, test]
 
     steps:
-    - uses: actions/checkout@v4
-    - uses: docker/setup-buildx-action@v3
-    - run: |
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker image
+      run: |
         docker build -t devsecops-demo:${{ github.sha }} .
         docker build -t devsecops-demo:latest .
 
-    - uses: aquasecurity/trivy-action@0.24.0
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@0.24.0
       with:
         image-ref: 'devsecops-demo:latest'
-        format: 'table'
+        format: 'json'
+        output: 'trivy.json'
         exit-code: '0'
         severity: 'CRITICAL,HIGH'
+
+    - name: Upload Trivy Report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: trivy-report
+        path: trivy.json
+
+    - name: Send results to DevSecOps Dashboard
+      if: always()
+      env:
+        DASHBOARD_URL: ${{ secrets.DASHBOARD_URL }}
+        API_TOKEN: ${{ secrets.API_TOKEN }}
+      run: |
+        echo "Sending pipeline results to dashboard..."
+        python3 - <<'PYCODE'
+        import json, requests, os
+
+        def load_json(file):
+            if os.path.exists(file):
+                try:
+                    with open(file) as f:
+                        return json.load(f)
+                except Exception:
+                    return {}
+            return {}
+
+        payload = {
+            "pipeline_run": "${{ github.run_id }}",
+            "commit": "${{ github.sha }}",
+            "branch": "${{ github.ref_name }}",
+            "timestamp": "${{ github.run_started_at }}",
+            "bandit": load_json("bandit-report.json"),
+            "safety": load_json("safety.json"),
+            "trivy": load_json("trivy.json"),
+            "coverage": load_json("coverage.xml"),
+        }
+
+        url = os.environ["DASHBOARD_URL"].rstrip("/") + "/api/update"
+        headers = {"Authorization": f"Bearer {os.environ.get('API_TOKEN', '')}"}
+        try:
+            resp = requests.post(url, json=payload, headers=headers, timeout=15)
+            print("Dashboard update response:", resp.status_code, resp.text)
+        except Exception as e:
+            print("Dashboard update failed:", str(e))
+        PYCODE
+
 
   deploy:
     name: Deploy (Simulation)
@@ -105,7 +186,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-    - run: |
+    - name: Simulate Deployment
+      run: |
         echo "Deployment would happen here..."
         echo "Environment: Production"
         echo "Image: devsecops-demo:${{ github.sha }}"
