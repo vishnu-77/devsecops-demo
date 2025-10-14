@@ -1,1 +1,465 @@
-[]
+{
+    "report_meta": {
+        "scan_target": "environment",
+        "scanned": [
+            "/opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/site-packages"
+        ],
+        "policy_file": "-",
+        "policy_file_source": "local",
+        "api_key": false,
+        "local_database_path": null,
+        "safety_version": "2.3.5",
+        "timestamp": "2025-10-14 22:10:43",
+        "packages_found": 37,
+        "vulnerabilities_found": 9,
+        "vulnerabilities_ignored": 0,
+        "remediations_recommended": 0,
+        "telemetry": {
+            "os_type": "Linux",
+            "os_release": "6.11.0-1018-azure",
+            "os_description": "Linux-6.11.0-1018-azure-x86_64-with-glibc2.39",
+            "python_version": "3.11.13",
+            "safety_command": "check",
+            "safety_options": {
+                "json": {
+                    "--json": 1
+                }
+            },
+            "safety_version": "2.3.5",
+            "safety_source": "cli"
+        },
+        "git": {
+            "branch": "main",
+            "tag": "",
+            "commit": "afea4b2f94ec688d4acdbb625e8ef88740a23ed9",
+            "dirty": true,
+            "origin": "https://github.com/vishnu-77/devsecops-demo"
+        },
+        "project": null,
+        "json_version": 1
+    },
+    "scanned_packages": {
+        "certifi": {
+            "name": "certifi",
+            "version": "2025.10.5"
+        },
+        "setuptools": {
+            "name": "setuptools",
+            "version": "65.5.0"
+        },
+        "pip": {
+            "name": "pip",
+            "version": "25.2"
+        },
+        "packaging": {
+            "name": "packaging",
+            "version": "21.3"
+        },
+        "rich": {
+            "name": "rich",
+            "version": "14.2.0"
+        },
+        "click": {
+            "name": "click",
+            "version": "8.3.0"
+        },
+        "coverage": {
+            "name": "coverage",
+            "version": "7.10.7"
+        },
+        "pytest": {
+            "name": "pytest",
+            "version": "7.4.3"
+        },
+        "pbr": {
+            "name": "pbr",
+            "version": "7.0.1"
+        },
+        "pyyaml": {
+            "name": "pyyaml",
+            "version": "6.0.3"
+        },
+        "stevedore": {
+            "name": "stevedore",
+            "version": "5.5.0"
+        },
+        "smmap": {
+            "name": "smmap",
+            "version": "5.0.2"
+        },
+        "pytest-cov": {
+            "name": "pytest-cov",
+            "version": "4.1.0"
+        },
+        "gitdb": {
+            "name": "gitdb",
+            "version": "4.0.12"
+        },
+        "markdown-it-py": {
+            "name": "markdown-it-py",
+            "version": "4.0.0"
+        },
+        "idna": {
+            "name": "idna",
+            "version": "3.11"
+        },
+        "charset-normalizer": {
+            "name": "charset-normalizer",
+            "version": "3.4.4"
+        },
+        "pyparsing": {
+            "name": "pyparsing",
+            "version": "3.2.5"
+        },
+        "gitpython": {
+            "name": "gitpython",
+            "version": "3.1.45"
+        },
+        "jinja2": {
+            "name": "jinja2",
+            "version": "3.1.6"
+        },
+        "markupsafe": {
+            "name": "markupsafe",
+            "version": "3.0.3"
+        },
+        "werkzeug": {
+            "name": "werkzeug",
+            "version": "3.0.1"
+        },
+        "flask": {
+            "name": "flask",
+            "version": "3.0.0"
+        },
+        "requests": {
+            "name": "requests",
+            "version": "2.31.0"
+        },
+        "pygments": {
+            "name": "pygments",
+            "version": "2.19.2"
+        },
+        "urllib3": {
+            "name": "urllib3",
+            "version": "2.5.0"
+        },
+        "safety": {
+            "name": "safety",
+            "version": "2.3.5"
+        },
+        "itsdangerous": {
+            "name": "itsdangerous",
+            "version": "2.2.0"
+        },
+        "iniconfig": {
+            "name": "iniconfig",
+            "version": "2.1.0"
+        },
+        "blinker": {
+            "name": "blinker",
+            "version": "1.9.0"
+        },
+        "bandit": {
+            "name": "bandit",
+            "version": "1.7.5"
+        },
+        "pluggy": {
+            "name": "pluggy",
+            "version": "1.6.0"
+        },
+        "python-dotenv": {
+            "name": "python-dotenv",
+            "version": "1.0.0"
+        },
+        "ruamel.yaml": {
+            "name": "ruamel.yaml",
+            "version": "0.18.15"
+        },
+        "dparse": {
+            "name": "dparse",
+            "version": "0.6.4"
+        },
+        "ruamel.yaml.clib": {
+            "name": "ruamel.yaml.clib",
+            "version": "0.2.14"
+        },
+        "mdurl": {
+            "name": "mdurl",
+            "version": "0.1.2"
+        }
+    },
+    "affected_packages": {
+        "setuptools": {
+            "name": "setuptools",
+            "version": "65.5.0",
+            "found": "/opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/site-packages",
+            "insecure_versions": [],
+            "secure_versions": [],
+            "latest_version_without_known_vulnerabilities": null,
+            "latest_version": null,
+            "more_info_url": "https://data.safetycli.com"
+        },
+        "werkzeug": {
+            "name": "werkzeug",
+            "version": "3.0.1",
+            "found": "/opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/site-packages",
+            "insecure_versions": [],
+            "secure_versions": [],
+            "latest_version_without_known_vulnerabilities": null,
+            "latest_version": null,
+            "more_info_url": "https://data.safetycli.com"
+        },
+        "requests": {
+            "name": "requests",
+            "version": "2.31.0",
+            "found": "/opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/site-packages",
+            "insecure_versions": [],
+            "secure_versions": [],
+            "latest_version_without_known_vulnerabilities": null,
+            "latest_version": null,
+            "more_info_url": "https://data.safetycli.com"
+        },
+        "bandit": {
+            "name": "bandit",
+            "version": "1.7.5",
+            "found": "/opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/site-packages",
+            "insecure_versions": [],
+            "secure_versions": [],
+            "latest_version_without_known_vulnerabilities": null,
+            "latest_version": null,
+            "more_info_url": "https://data.safetycli.com"
+        }
+    },
+    "announcements": [],
+    "vulnerabilities": [
+        {
+            "vulnerability_id": "72236",
+            "package_name": "setuptools",
+            "ignored": {},
+            "ignored_reason": null,
+            "ignored_expires": null,
+            "vulnerable_spec": "<70.0.0",
+            "all_vulnerable_specs": [
+                "<70.0.0"
+            ],
+            "analyzed_version": "65.5.0",
+            "advisory": "Affected versions of Setuptools allow for remote code execution via its download functions. These functions, which are used to download packages from URLs provided by users or retrieved from package index servers, are susceptible to code injection. If these functions are exposed to user-controlled inputs, such as package URLs, they can execute arbitrary commands on the system.",
+            "is_transitive": false,
+            "published_date": null,
+            "fixed_versions": [],
+            "closest_versions_without_known_vulnerabilities": [],
+            "resources": [],
+            "CVE": "CVE-2024-6345",
+            "severity": null,
+            "affected_versions": [],
+            "more_info_url": "https://data.safetycli.com/v/72236/f17"
+        },
+        {
+            "vulnerability_id": "76752",
+            "package_name": "setuptools",
+            "ignored": {},
+            "ignored_reason": null,
+            "ignored_expires": null,
+            "vulnerable_spec": "<78.1.1",
+            "all_vulnerable_specs": [
+                "<78.1.1"
+            ],
+            "analyzed_version": "65.5.0",
+            "advisory": "Affected versions of Setuptools are vulnerable to Path Traversal via PackageIndex.download(). The impact is Arbitrary File Overwrite: An attacker would be allowed to write files to arbitrary locations on the filesystem with the permissions of the process running the Python code, which could escalate to RCE depending on the context.",
+            "is_transitive": false,
+            "published_date": null,
+            "fixed_versions": [],
+            "closest_versions_without_known_vulnerabilities": [],
+            "resources": [],
+            "CVE": "CVE-2025-47273",
+            "severity": null,
+            "affected_versions": [],
+            "more_info_url": "https://data.safetycli.com/v/76752/f17"
+        },
+        {
+            "vulnerability_id": "52495",
+            "package_name": "setuptools",
+            "ignored": {},
+            "ignored_reason": null,
+            "ignored_expires": null,
+            "vulnerable_spec": "<65.5.1",
+            "all_vulnerable_specs": [
+                "<65.5.1"
+            ],
+            "analyzed_version": "65.5.0",
+            "advisory": "Setuptools 65.5.1 includes a fix for CVE-2022-40897: Python Packaging Authority (PyPA) setuptools before 65.5.1 allows remote attackers to cause a denial of service via HTML in a crafted package or custom PackageIndex page. There is a Regular Expression Denial of Service (ReDoS) in package_index.py.",
+            "is_transitive": false,
+            "published_date": null,
+            "fixed_versions": [],
+            "closest_versions_without_known_vulnerabilities": [],
+            "resources": [],
+            "CVE": "CVE-2022-40897",
+            "severity": null,
+            "affected_versions": [],
+            "more_info_url": "https://data.safetycli.com/v/52495/f17"
+        },
+        {
+            "vulnerability_id": "71594",
+            "package_name": "werkzeug",
+            "ignored": {},
+            "ignored_reason": null,
+            "ignored_expires": null,
+            "vulnerable_spec": "<3.0.3",
+            "all_vulnerable_specs": [
+                "<3.0.3"
+            ],
+            "analyzed_version": "3.0.1",
+            "advisory": "Werkzeug is a comprehensive WSGI web application library. The debugger in affected versions of Werkzeug can allow an attacker to execute code on a developer's machine under some circumstances. This requires the attacker to get the developer to interact with a domain and subdomain they control, and enter the debugger PIN, but if they are successful it allows access to the debugger even if it is only running on localhost. This also requires the attacker to guess a URL in the developer's application that will trigger the debugger.",
+            "is_transitive": false,
+            "published_date": null,
+            "fixed_versions": [],
+            "closest_versions_without_known_vulnerabilities": [],
+            "resources": [],
+            "CVE": "CVE-2024-34069",
+            "severity": null,
+            "affected_versions": [],
+            "more_info_url": "https://data.safetycli.com/v/71594/f17"
+        },
+        {
+            "vulnerability_id": "73969",
+            "package_name": "werkzeug",
+            "ignored": {},
+            "ignored_reason": null,
+            "ignored_expires": null,
+            "vulnerable_spec": "<3.0.6",
+            "all_vulnerable_specs": [
+                "<3.0.6"
+            ],
+            "analyzed_version": "3.0.1",
+            "advisory": "Affected versions of Werkzeug are vulnerable to Path Traversal (CWE-22) on Windows systems running Python versions below 3.11. The safe_join() function failed to properly detect certain absolute paths on Windows, allowing attackers to potentially access files outside the intended directory. An attacker could craft special paths starting with \"/\" that bypass the directory restrictions on Windows systems. The vulnerability exists in the safe_join() function which relied solely on os.path.isabs() for path validation. This is exploitable on Windows systems by passing paths starting with \"/\" to safe_join(). To remediate, upgrade to the latest version which includes additional path validation checks. \r\nNOTE: This vulnerability specifically affects Windows systems running Python versions below 3.11 where ntpath.isabs() behavior differs.",
+            "is_transitive": false,
+            "published_date": null,
+            "fixed_versions": [],
+            "closest_versions_without_known_vulnerabilities": [],
+            "resources": [],
+            "CVE": "CVE-2024-49766",
+            "severity": null,
+            "affected_versions": [],
+            "more_info_url": "https://data.safetycli.com/v/73969/f17"
+        },
+        {
+            "vulnerability_id": "73889",
+            "package_name": "werkzeug",
+            "ignored": {},
+            "ignored_reason": null,
+            "ignored_expires": null,
+            "vulnerable_spec": "<3.0.6",
+            "all_vulnerable_specs": [
+                "<3.0.6"
+            ],
+            "analyzed_version": "3.0.1",
+            "advisory": "Affected versions of Werkzeug are potentially vulnerable to resource exhaustion when parsing file data in forms. Applications using 'werkzeug.formparser.MultiPartParser' to parse 'multipart/form-data' requests (e.g. all flask applications) are vulnerable to a relatively simple but effective resource exhaustion (denial of service) attack. A specifically crafted form submission request can cause the parser to allocate and block 3 to 8 times the upload size in main memory. There is no upper limit; a single upload at 1 Gbit/s can exhaust 32 GB of RAM in less than 60 seconds.",
+            "is_transitive": false,
+            "published_date": null,
+            "fixed_versions": [],
+            "closest_versions_without_known_vulnerabilities": [],
+            "resources": [],
+            "CVE": "CVE-2024-49767",
+            "severity": null,
+            "affected_versions": [],
+            "more_info_url": "https://data.safetycli.com/v/73889/f17"
+        },
+        {
+            "vulnerability_id": "77680",
+            "package_name": "requests",
+            "ignored": {},
+            "ignored_reason": null,
+            "ignored_expires": null,
+            "vulnerable_spec": "<2.32.4",
+            "all_vulnerable_specs": [
+                "<2.32.4"
+            ],
+            "analyzed_version": "2.31.0",
+            "advisory": "Requests is an HTTP library. Due to a URL parsing issue, Requests releases prior to 2.32.4 may leak .netrc credentials to third parties for specific maliciously-crafted URLs. Users should upgrade to version 2.32.4 to receive a fix. For older versions of Requests, use of the .netrc file can be disabled with `trust_env=False` on one's Requests Session.",
+            "is_transitive": false,
+            "published_date": null,
+            "fixed_versions": [],
+            "closest_versions_without_known_vulnerabilities": [],
+            "resources": [],
+            "CVE": "CVE-2024-47081",
+            "severity": null,
+            "affected_versions": [],
+            "more_info_url": "https://data.safetycli.com/v/77680/f17"
+        },
+        {
+            "vulnerability_id": "71064",
+            "package_name": "requests",
+            "ignored": {},
+            "ignored_reason": null,
+            "ignored_expires": null,
+            "vulnerable_spec": "<2.32.2",
+            "all_vulnerable_specs": [
+                "<2.32.2"
+            ],
+            "analyzed_version": "2.31.0",
+            "advisory": "Affected versions of Requests, when making requests through a Requests `Session`, if the first request is made with `verify=False` to disable cert verification, all subsequent requests to the same host will continue to ignore cert verification regardless of changes to the value of `verify`. This behavior will continue for the lifecycle of the connection in the connection pool. Requests 2.32.0 fixes the issue, but versions 2.32.0 and 2.32.1 were yanked due to conflicts with CVE-2024-35195 mitigation.",
+            "is_transitive": false,
+            "published_date": null,
+            "fixed_versions": [],
+            "closest_versions_without_known_vulnerabilities": [],
+            "resources": [],
+            "CVE": "CVE-2024-35195",
+            "severity": null,
+            "affected_versions": [],
+            "more_info_url": "https://data.safetycli.com/v/71064/f17"
+        },
+        {
+            "vulnerability_id": "64484",
+            "package_name": "bandit",
+            "ignored": {},
+            "ignored_reason": null,
+            "ignored_expires": null,
+            "vulnerable_spec": "<1.7.7",
+            "all_vulnerable_specs": [
+                "<1.7.7"
+            ],
+            "analyzed_version": "1.7.5",
+            "advisory": "Bandit 1.7.7 identifies the str.replace method as a potential risk for SQL injection because it can be misused in constructing SQL queries, potentially enabling the execution of arbitrary SQL code.\r\nhttps://github.com/PyCQA/bandit/pull/1044/commits/d909043ba20853c90a7cad4a5b58a180f6937bf8",
+            "is_transitive": false,
+            "published_date": null,
+            "fixed_versions": [],
+            "closest_versions_without_known_vulnerabilities": [],
+            "resources": [],
+            "CVE": null,
+            "severity": null,
+            "affected_versions": [],
+            "more_info_url": "https://data.safetycli.com/v/64484/f17"
+        }
+    ],
+    "ignored_vulnerabilities": [],
+    "remediations": {
+        "setuptools": {
+            "current_version": "65.5.0",
+            "vulnerabilities_found": 3,
+            "recommended_version": null,
+            "other_recommended_versions": [],
+            "more_info_url": "https://data.safetycli.com/?from=65.5.0"
+        },
+        "werkzeug": {
+            "current_version": "3.0.1",
+            "vulnerabilities_found": 3,
+            "recommended_version": null,
+            "other_recommended_versions": [],
+            "more_info_url": "https://data.safetycli.com/?from=3.0.1"
+        },
+        "requests": {
+            "current_version": "2.31.0",
+            "vulnerabilities_found": 2,
+            "recommended_version": null,
+            "other_recommended_versions": [],
+            "more_info_url": "https://data.safetycli.com/?from=2.31.0"
+        },
+        "bandit": {
+            "current_version": "1.7.5",
+            "vulnerabilities_found": 1,
+            "recommended_version": null,
+            "other_recommended_versions": [],
+            "more_info_url": "https://data.safetycli.com/?from=1.7.5"
+        }
+    }
+}
