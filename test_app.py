@@ -1,6 +1,3 @@
-"""
-Unit tests for the DevSecOps demo application
-"""
 import pytest
 import json
 from app import app
@@ -22,44 +19,36 @@ def test_health_endpoint(client):
     """Test the health check endpoint"""
     response = client.get('/health')
     assert response.status_code == 200
-    data = json.loads(response.data)
+    data = response.get_json()
     assert data['status'] == 'healthy'
     assert 'version' in data
 
 def test_echo_endpoint_success(client):
     """Test the echo endpoint with valid data"""
     test_message = "Hello, DevSecOps!"
-    response = client.post('/api/echo',
-                          data=json.dumps({'message': test_message}),
-                          content_type='application/json')
+    response = client.post('/api/echo', json={'message': test_message})
     assert response.status_code == 200
-    data = json.loads(response.data)
+    data = response.get_json()
     assert data['echo'] == test_message
     assert data['length'] == len(test_message)
 
 def test_echo_endpoint_no_data(client):
-    """Test the echo endpoint with no data (empty message)"""
-    response = client.post('/api/echo',
-                          data=json.dumps({'message': ''}),
-                          content_type='application/json')
+    """Test the echo endpoint with empty message"""
+    response = client.post('/api/echo', json={'message': ''})
     assert response.status_code == 200
-    data = json.loads(response.data)
+    data = response.get_json()
     assert data['echo'] == ''
     assert data['length'] == 0
 
 def test_echo_endpoint_too_long(client):
     """Test the echo endpoint with message too long"""
     test_message = "x" * 1001  # Exceeds 1000 character limit
-    response = client.post('/api/echo',
-                          data=json.dumps({'message': test_message}),
-                          content_type='application/json')
+    response = client.post('/api/echo', json={'message': test_message})
     assert response.status_code == 400
-    data = json.loads(response.data)
+    data = response.get_json()
     assert 'error' in data
 
 def test_echo_endpoint_invalid_content_type(client):
     """Test the echo endpoint with invalid content type"""
-    response = client.post('/api/echo',
-                          data='not json',
-                          content_type='text/plain')
+    response = client.post('/api/echo', data='not json', content_type='text/plain')
     assert response.status_code in [400, 415]

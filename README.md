@@ -269,6 +269,7 @@ Security features:
 - Python 3.11+
 - Docker (optional)
 - Git
+- GitHub Personal Access Token (for GitHub Actions integration)
 
 ### Local Development
 
@@ -288,12 +289,49 @@ Security features:
    pip install -r requirements-dev.txt
    ```
 
-4. **Run the application**
+4. **Configure environment variables**
+
+   Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
+
+   Edit `.env` and set the following variables:
+   - `GITHUB_TOKEN`: Your GitHub personal access token with `repo` and `actions:read` permissions
+   - `GITHUB_REPOSITORY`: Your repository in the format `owner/repo` (e.g., `username/devsecops-demo`)
+   - `API_TOKEN`: A secure token for the `/api/update` endpoint
+   - `DASHBOARD_URL`: The URL where your dashboard is hosted (for GitHub Actions integration)
+
+   **Creating a GitHub Personal Access Token:**
+   1. Go to GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)
+   2. Click "Generate new token (classic)"
+   3. Select scopes: `repo` (Full control of private repositories) and `actions:read`
+   4. Copy the token and add it to your `.env` file
+
+5. **Run the application**
    ```bash
    python app.py
    ```
 
    Visit: http://localhost:5000
+
+### GitHub Actions Integration
+
+The dashboard now displays real-time status of GitHub Actions workflow runs. To enable this feature:
+
+1. Set the `GITHUB_TOKEN` and `GITHUB_REPOSITORY` environment variables as described above
+2. The dashboard will automatically fetch and display the status of the latest workflow run
+3. Job statuses are color-coded:
+   - **Green (SUCCESS)**: Job completed successfully
+   - **Red (FAILURE)**: Job failed
+   - **Blue (IN_PROGRESS)**: Job is currently running
+   - **Gray (SKIPPED/N/A)**: Job was skipped or not found
+
+The dashboard displays status for these jobs:
+- Security Scanning (Bandit & Safety)
+- Unit Tests (pytest with coverage)
+- Build & Scan Docker Image (Docker + Trivy)
+- Deploy (Simulation)
 
 ### Running Security Scans
 
