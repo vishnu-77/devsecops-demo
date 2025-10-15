@@ -447,20 +447,5 @@ Ideas for further exploration:
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 - [Docker Security Best Practices](https://docs.docker.com/develop/security-best-practices/)
 
-## License
-
-This project is for educational purposes only.
-
-## Discussion Questions for Students
-
-1. Why is it important to integrate security early in the development process?
-2. What are the benefits of automating security checks?
-3. How does DevSecOps differ from traditional security approaches?
-4. What security issues might Bandit detect in Python code?
-5. Why should containers run as non-root users?
-6. What happens if a security scan finds a critical vulnerability?
-7. How can we balance security with development speed?
-
 ---
-
 **Note**: This is a simplified demonstration. Production systems require additional security measures including secrets management, comprehensive monitoring, incident response procedures, and compliance controls.
