@@ -9,7 +9,7 @@
         "api_key": false,
         "local_database_path": null,
         "safety_version": "2.3.5",
-        "timestamp": "2025-10-14 22:10:43",
+        "timestamp": "2025-10-14 22:35:39",
         "packages_found": 37,
         "vulnerabilities_found": 9,
         "vulnerabilities_ignored": 0,
@@ -31,7 +31,7 @@
         "git": {
             "branch": "main",
             "tag": "",
-            "commit": "afea4b2f94ec688d4acdbb625e8ef88740a23ed9",
+            "commit": "1e1712f9fb08a4bb43c3f816c751dc8db89a9b86",
             "dirty": true,
             "origin": "https://github.com/vishnu-77/devsecops-demo"
         },
