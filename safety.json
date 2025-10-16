@@ -9,7 +9,7 @@
         "api_key": false,
         "local_database_path": null,
         "safety_version": "2.3.5",
-        "timestamp": "2025-10-15 14:59:42",
+        "timestamp": "2025-10-16 14:29:16",
         "packages_found": 37,
         "vulnerabilities_found": 9,
         "vulnerabilities_ignored": 0,
@@ -31,7 +31,7 @@
         "git": {
             "branch": "main",
             "tag": "",
-            "commit": "05e825d9bb3291f828982a8a710bbd3134164243",
+            "commit": "19372e1393aeab40b139bb73950d9727e5615c07",
             "dirty": true,
             "origin": "https://github.com/vishnu-77/devsecops-demo"
         },
@@ -65,7 +65,7 @@
         },
         "coverage": {
             "name": "coverage",
-            "version": "7.10.7"
+            "version": "7.11.0"
         },
         "pytest": {
             "name": "pytest",
