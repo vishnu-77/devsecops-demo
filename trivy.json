@@ -1,6 +1,6 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2025-10-16T14:30:06.912198739Z",
+  "CreatedAt": "2025-10-16T14:35:32.483173006Z",
   "ArtifactName": "devsecops-demo:latest",
   "ArtifactType": "container_image",
   "Metadata": {
@@ -8,24 +8,24 @@
       "Family": "debian",
       "Name": "13.1"
     },
-    "ImageID": "sha256:3bd076c8804188c595fd478f0bc3ea4cd69921d2228941c11590285691bc0a8a",
+    "ImageID": "sha256:512077fca94a45e353a8cf14f3e265aacd65a6b95373205bd9f1f832b8f1f2b5",
     "DiffIDs": [
       "sha256:1d46119d249f7719e1820e24a311aa7c453f166f714969cffe89504678eaa447",
       "sha256:c9cf0647c3882a77b947246ce8bc999f0ed98d1cf9625179568100ba9fd3a7b4",
       "sha256:dba5cbed1e08d00224b28b2e9ae8a59c121de39c36085ed722890ef0af8fee69",
       "sha256:b2738b04de4b7bb1dcf8fa8e5fe7f3856ba7d91a8c9a7857014163c7b8c2a84d",
-      "sha256:8c19ca7959db226571f95809dc75291046818be05cb519da613d83a21a23e233",
+      "sha256:88c16d14762fd9fbdfa945ba879c43fe0be96f60d0b1c8177df5097dc9eaa62d",
       "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
-      "sha256:52ca09259aeecc3206c4565e6ccb807def315e6d0f98ee64c6f8de0014ab9165",
-      "sha256:48734dccb8d18d111861a57dbf2acbd78c06f96c74553b22b01a3b6de491c945"
+      "sha256:d6993ca6bcfba1d8b56f8c3a2f29839c861f2f593916e193052d8c41c8c629b3",
+      "sha256:bc3c89f617c02a684fe0dc00e79ded46b2f509c07412937630652848ebcde456"
     ],
     "RepoTags": [
-      "devsecops-demo:19372e1393aeab40b139bb73950d9727e5615c07",
+      "devsecops-demo:03d1f1eefc64f922c78584341db40bcdf46f3cfa",
       "devsecops-demo:latest"
     ],
     "ImageConfig": {
       "architecture": "amd64",
-      "created": "2025-10-16T14:29:58.968195031Z",
+      "created": "2025-10-16T14:35:24.900993851Z",
       "history": [
         {
           "created": "2025-09-29T00:00:00Z",
@@ -84,63 +84,63 @@
           "empty_layer": true
         },
         {
-          "created": "2025-10-16T14:29:56Z",
+          "created": "2025-10-16T14:35:21Z",
           "created_by": "RUN /bin/sh -c useradd -m -u 1000 appuser \u0026\u0026     mkdir -p /app \u0026\u0026     chown -R appuser:appuser /app # buildkit",
           "comment": "buildkit.dockerfile.v0"
         },
         {
-          "created": "2025-10-16T14:29:56Z",
+          "created": "2025-10-16T14:35:21Z",
           "created_by": "WORKDIR /app",
           "comment": "buildkit.dockerfile.v0"
         },
         {
-          "created": "2025-10-16T14:29:58Z",
+          "created": "2025-10-16T14:35:24Z",
           "created_by": "COPY --chown=appuser:appuser /root/.local /home/appuser/.local # buildkit",
           "comment": "buildkit.dockerfile.v0"
         },
         {
-          "created": "2025-10-16T14:29:58Z",
+          "created": "2025-10-16T14:35:24Z",
           "created_by": "COPY --chown=appuser:appuser app.py . # buildkit",
           "comment": "buildkit.dockerfile.v0"
         },
         {
-          "created": "2025-10-16T14:29:58Z",
+          "created": "2025-10-16T14:35:24Z",
           "created_by": "ENV PATH=/home/appuser/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2025-10-16T14:29:58Z",
+          "created": "2025-10-16T14:35:24Z",
           "created_by": "USER appuser",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2025-10-16T14:29:58Z",
+          "created": "2025-10-16T14:35:24Z",
           "created_by": "EXPOSE map[5000/tcp:{}]",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2025-10-16T14:29:58Z",
+          "created": "2025-10-16T14:35:24Z",
           "created_by": "HEALTHCHECK \u0026{[\"CMD-SHELL\" \"python -c \\\"import urllib.request; urllib.request.urlopen('http://localhost:5000/health')\\\" || exit 1\"] \"30s\" \"3s\" \"5s\" \"0s\" '\\x03'}",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2025-10-16T14:29:58Z",
+          "created": "2025-10-16T14:35:24Z",
           "created_by": "ENV FLASK_ENV=production",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2025-10-16T14:29:58Z",
+          "created": "2025-10-16T14:35:24Z",
           "created_by": "ENV PYTHONUNBUFFERED=1",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2025-10-16T14:29:58Z",
+          "created": "2025-10-16T14:35:24Z",
           "created_by": "CMD [\"python\" \"app.py\"]",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
@@ -154,10 +154,10 @@
           "sha256:c9cf0647c3882a77b947246ce8bc999f0ed98d1cf9625179568100ba9fd3a7b4",
           "sha256:dba5cbed1e08d00224b28b2e9ae8a59c121de39c36085ed722890ef0af8fee69",
           "sha256:b2738b04de4b7bb1dcf8fa8e5fe7f3856ba7d91a8c9a7857014163c7b8c2a84d",
-          "sha256:8c19ca7959db226571f95809dc75291046818be05cb519da613d83a21a23e233",
+          "sha256:88c16d14762fd9fbdfa945ba879c43fe0be96f60d0b1c8177df5097dc9eaa62d",
           "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
-          "sha256:52ca09259aeecc3206c4565e6ccb807def315e6d0f98ee64c6f8de0014ab9165",
-          "sha256:48734dccb8d18d111861a57dbf2acbd78c06f96c74553b22b01a3b6de491c945"
+          "sha256:d6993ca6bcfba1d8b56f8c3a2f29839c861f2f593916e193052d8c41c8c629b3",
+          "sha256:bc3c89f617c02a684fe0dc00e79ded46b2f509c07412937630652848ebcde456"
         ]
       },
       "config": {
@@ -213,7 +213,7 @@
           "FixedVersion": "3.0.3",
           "Status": "fixed",
           "Layer": {
-            "DiffID": "sha256:52ca09259aeecc3206c4565e6ccb807def315e6d0f98ee64c6f8de0014ab9165"
+            "DiffID": "sha256:d6993ca6bcfba1d8b56f8c3a2f29839c861f2f593916e193052d8c41c8c629b3"
           },
           "SeveritySource": "ghsa",
           "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-34069",

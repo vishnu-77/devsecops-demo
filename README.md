@@ -1,6 +1,6 @@
 # DevSecOps Demo Project
 
-A simple demonstration project showcasing DevSecOps practices and tools for educational purposes.
+A simple demonstration project showcasing DevSecOps practices and tools for educational and demo purposes
 
 ## Overview
 
