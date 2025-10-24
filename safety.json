@@ -9,7 +9,7 @@
         "api_key": false,
         "local_database_path": null,
         "safety_version": "2.3.5",
-        "timestamp": "2025-10-16 14:34:34",
+        "timestamp": "2025-10-22 20:12:43",
         "packages_found": 37,
         "vulnerabilities_found": 9,
         "vulnerabilities_ignored": 0,
@@ -31,7 +31,7 @@
         "git": {
             "branch": "main",
             "tag": "",
-            "commit": "03d1f1eefc64f922c78584341db40bcdf46f3cfa",
+            "commit": "1d1f25b389e94b07735cfa01c78ff083a9d47e6e",
             "dirty": true,
             "origin": "https://github.com/vishnu-77/devsecops-demo"
         },
@@ -147,13 +147,13 @@
             "name": "safety",
             "version": "2.3.5"
         },
+        "iniconfig": {
+            "name": "iniconfig",
+            "version": "2.3.0"
+        },
         "itsdangerous": {
             "name": "itsdangerous",
             "version": "2.2.0"
-        },
-        "iniconfig": {
-            "name": "iniconfig",
-            "version": "2.1.0"
         },
         "blinker": {
             "name": "blinker",
@@ -173,7 +173,7 @@
         },
         "ruamel.yaml": {
             "name": "ruamel.yaml",
-            "version": "0.18.15"
+            "version": "0.18.16"
         },
         "dparse": {
             "name": "dparse",
@@ -255,28 +255,6 @@
             "more_info_url": "https://data.safetycli.com/v/72236/f17"
         },
         {
-            "vulnerability_id": "76752",
-            "package_name": "setuptools",
-            "ignored": {},
-            "ignored_reason": null,
-            "ignored_expires": null,
-            "vulnerable_spec": "<78.1.1",
-            "all_vulnerable_specs": [
-                "<78.1.1"
-            ],
-            "analyzed_version": "65.5.0",
-            "advisory": "Affected versions of Setuptools are vulnerable to Path Traversal via PackageIndex.download(). The impact is Arbitrary File Overwrite: An attacker would be allowed to write files to arbitrary locations on the filesystem with the permissions of the process running the Python code, which could escalate to RCE depending on the context.",
-            "is_transitive": false,
-            "published_date": null,
-            "fixed_versions": [],
-            "closest_versions_without_known_vulnerabilities": [],
-            "resources": [],
-            "CVE": "CVE-2025-47273",
-            "severity": null,
-            "affected_versions": [],
-            "more_info_url": "https://data.safetycli.com/v/76752/f17"
-        },
-        {
             "vulnerability_id": "52495",
             "package_name": "setuptools",
             "ignored": {},
@@ -297,6 +275,28 @@
             "severity": null,
             "affected_versions": [],
             "more_info_url": "https://data.safetycli.com/v/52495/f17"
+        },
+        {
+            "vulnerability_id": "76752",
+            "package_name": "setuptools",
+            "ignored": {},
+            "ignored_reason": null,
+            "ignored_expires": null,
+            "vulnerable_spec": "<78.1.1",
+            "all_vulnerable_specs": [
+                "<78.1.1"
+            ],
+            "analyzed_version": "65.5.0",
+            "advisory": "Affected versions of Setuptools are vulnerable to Path Traversal via PackageIndex.download(). The impact is Arbitrary File Overwrite: An attacker would be allowed to write files to arbitrary locations on the filesystem with the permissions of the process running the Python code, which could escalate to RCE depending on the context.",
+            "is_transitive": false,
+            "published_date": null,
+            "fixed_versions": [],
+            "closest_versions_without_known_vulnerabilities": [],
+            "resources": [],
+            "CVE": "CVE-2025-47273",
+            "severity": null,
+            "affected_versions": [],
+            "more_info_url": "https://data.safetycli.com/v/76752/f17"
         },
         {
             "vulnerability_id": "71594",
